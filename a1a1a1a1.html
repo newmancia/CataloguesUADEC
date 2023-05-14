@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bookstore Flow Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/gojs/release/go.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #F5F5F5;
+        margin: 0;
+        padding: 0;
+      }
+      #myDiagramDiv {
+        width: 100%;
+        height: 600px;
+        background-color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="myDiagramDiv"></div>
+
+    <script>
+      function init() {
+        var $ = go.GraphObject.make;  // for conciseness in defining templates
+
+        var myDiagram =
+          $(go.Diagram, "myDiagramDiv",
+            {
+              initialAutoScale: go.Diagram.UniformToFill,
+              layout: $(go.LayeredDigraphLayout, { direction: 90, layerSpacing: 10 }),
+              "undoManager.isEnabled": true
+            });
+
+        // Define the Node template.
+        myDiagram.nodeTemplate =
+          $(go.Node, "Auto",
+            $(go.Shape, "Rectangle",
+              { fill: "white", stroke: "black" },
+              new go.Binding("fill", "color")),
+            $(go.TextBlock,
+              { margin: 8, font: "bold 14px sans-serif" },
+              new go.Binding("text", "name"))
+          );
+
+        // Define the Link template.
+        myDiagram.linkTemplate =
+          $(go.Link,
+            { routing: go.Link.Orthogonal, corner: 5 },
+            $(go.Shape, { strokeWidth: 3, stroke: "black" }));
+
+        // Define the model data.
+        var model = $(go.GraphLinksModel);
+
+        model.nodeDataArray =
+        [
+          { key: "Cultural Institutions", name: "Cultural Institutions", color: "#FFB6C1" },
+          { key: "Government", name: "Government", color: "#87CEEB" },
+          { key: "Public", name: "Public", color: "#F0E68C" },
+          { key: "University", name: "University", color: "#E6E6FA" },
+          { key: "Bookstore", name: "Bookstore", color: "#ADD8E6" }
+        ];
+
+        model.linkDataArray =
+        [
+          { from: "Cultural Institutions", to: "Bookstore" },
+          { from: "Government", to: "Bookstore" },
+          { from: "Public", to: "Bookstore" },
+          { from: "University", to: "Bookstore" }
+        ];
+
+        myDiagram.model = model;
+      }
+
+      init();
+    </script>
+  </body>
+</html>
